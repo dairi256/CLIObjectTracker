@@ -1,10 +1,13 @@
-﻿namespace CLIObjectTracker
+﻿using CLIObjectTracker.Services;
+
+namespace CLIObjectTracker
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("");
+            var app = new App();
+            await app.RunAsync();
         }
     }
 }

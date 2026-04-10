@@ -7,11 +7,22 @@ namespace CLIObjectTracker.Services
 {
     public class TLEService
     {
-        private readonly HttpClient _http = new();
+        private readonly HttpClient _http;
 
-        private const string CelestrakUrl = "https://celestrak.com/NORAD/elements/gp.php?GROUP=active&FORMAT=tle"; // This will be the main URL to fetch TLE data
+        private const string CelestrakUrl = "https://celestrak.org/NORAD/elements/gp.php?NAME={0}&FORMAT=TLE"; // This will be the main URL to fetch TLE data
 
-        private async Task<string[]> GetTLEAsync(string name)
+        public TLEService()
+        {
+            _http = new HttpClient();
+            _http.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "Mozilla/5.0 (Windows NT 10.0; Win64 x64) CLIObjectTracker/1.0"
+            );
+
+            _http.DefaultRequestHeaders.Accept.ParseAdd("text/plain");
+            _http.DefaultRequestHeaders.Connection.ParseAdd("keep-alive");
+        }
+
+        public async Task<string[]> GetTLEAsync(string name)
         {
             try
             {
