@@ -17,3 +17,8 @@ CLIObjectTracker is a C# Console Application, leveraging the use of Celestrak to
 
 ## Project Structure
 (Coming Soon)
+
+## Examples
+| Command | Output |
+| :--- | :--- |
+| `Spacecraft_Name`| 'UME (ISS) 1 08709U 76019A....
