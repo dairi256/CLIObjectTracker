@@ -43,7 +43,7 @@ namespace CLIObjectTracker.Services
             Console.WriteLine("└" + new string('─', MaxWidth - 2) + "┘");
         }
 
-        private void RenderDashboard(string title, string[] lines)
+        public void RenderDashboard(string title, string[] lines)
         {
             ClearScreen();
             DrawBoxHeader(title);

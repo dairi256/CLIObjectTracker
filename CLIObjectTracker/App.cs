@@ -28,9 +28,23 @@ namespace CLIObjectTracker
                 return;
             }
 
-            Console.WriteLine("\nTLE Data:");
-            foreach (var line in tle)
-                Console.WriteLine(line);
+            var info = ParseTLEInfo(tle);
+
+            while (true)
+            {
+                string[] lines =
+                {
+                    $"Epoch: {info.Epoch}",
+                    $"TLE Age: {info.Age.TotalHours:F2} hours",
+                    "",
+                    $"Time (UTC): {DateTime.UtcNow:yyyy-mm-dd HH:mm:ss}",
+                    "Position: Waiting for SGP4..." // Not implemented yet
+                };
+
+                _ui.RenderDashboard($"Tracking: {info.Name}", lines);
+
+                await Task.Delay(100);
+            }
         }
 
         private (string Name, string Epoch, TimeSpan Age) ParseTLEInfo(string[] tle)
@@ -38,7 +52,7 @@ namespace CLIObjectTracker
             string name = tle[0];
             string line1 = tle[1];
 
-            string epochRaw = line1.Substring(18, 24);
+            string epochRaw = line1.Substring(18, 14);
 
             int year = int.Parse(epochRaw.Substring(0, 2));
             int dayOfYear = int.Parse(epochRaw.Substring(2, 3));
@@ -46,12 +60,13 @@ namespace CLIObjectTracker
 
             year += (year < 57) ? 2000 : 1900;
 
-            DateTime epoch = new DateTime(year, 1, 1).AddDays(dayOfYear - 1)
+            DateTime epoch = new DateTime(year, 1, 1)
+                .AddDays(dayOfYear - 1)
                 .AddDays(fractionalDay);
 
             TimeSpan age = DateTime.UtcNow - epoch;
 
-            return (name, epoch.ToString("yyyy-MM-dd HH:mm:ss"), age);
+            return (name, epoch.ToString("yyyy-MM-dd HH:mm:ss 'UTC'"), age);
         }
     }
 }
